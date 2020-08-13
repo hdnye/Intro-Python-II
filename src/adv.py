@@ -1,7 +1,9 @@
 from room import Room
+from player import Player1
 
 # Declare all the rooms
 
+# Dictionary of rooms mapping name to Room 
 room = {
     'outside':  Room("Outside Cave Entrance",
                      "North of you, the cave mount beckons"),
@@ -39,6 +41,8 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
+player = Player1(room['outside'])
+
 # Write a loop that:
 #
 # * Prints the current room name
@@ -46,6 +50,20 @@ room['treasure'].s_to = room['narrow']
 # * Waits for user input and decides what to do.
 #
 # If the user enters a cardinal direction, attempt to move to the room there.
+
+# if user_input == 'n':
+#     if current_room.n_to is not None:
+#         player1.current_room = current_room.n_to
+#     else:
+#         pass
+
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+
+# PLAN
+# 1) Create room class with name and description
+# rooms are already linked
+# 2) create a player object
+# 3) figure out movement hasattr getattr
