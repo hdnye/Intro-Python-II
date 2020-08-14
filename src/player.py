@@ -2,7 +2,7 @@
 # currently.
 
 
-class Player1:
+class Player:
     def __init__(self, current_room):
         self.current_room = current_room
 

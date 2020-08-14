@@ -1,5 +1,5 @@
 from room import Room
-from player import Player1
+from player import Player
 
 # Declare all the rooms
 
@@ -41,28 +41,41 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
-player = Player1(room['outside'])
+player1 = Player(room['outside'])
+   
 
 # Write a loop that:
 #
 # * Prints the current room name
 # * Prints the current description (the textwrap module might be useful here).
 # * Waits for user input and decides what to do.
-#
+while True: 
+    current_room = player1.current_room
+    print('player1', player1.current_room.name) 
+    print('player1', player1.current_room.description)
+    user_input = input("Choose a direction to move in ('n', 's', 'e', 'w'):\n")    
+    attribute = user_input + '_to' 
 # If the user enters a cardinal direction, attempt to move to the room there.
-
-# if user_input == 'n':
-#     if current_room.n_to is not None:
-#         player1.current_room = current_room.n_to
-#     else:
-#         pass
-
+    if user_input == 'n':
+        if hasattr(current_room, 'n_to'):
+            player1.current_room = getattr(current_room, 's_to')  
+    if user_input == 's':    
+        if hasattr(current_room, 's_to'):
+            player1.current_room = getattr(current_room, 'n_to')
+    if user_input == 'e':
+        if hasattr(current_room, 'e_to'):
+            player1.current_room = getattr(current_room, 'w_to')
+    if user_input == 'w':         
+        if hasattr(current_room, 'w_to'):
+            player1.current_room = getattr(current_room, 'e_to')
 # Print an error message if the movement isn't allowed.
-#
+        else:
+            print('That is not a valid direction, please choose again')
 # If the user enters "q", quit the game.
-
-
-# PLAN
+        if user_input == 'q':
+            break
+ 
+ # PLAN
 # 1) Create room class with name and description
 # rooms are already linked
 # 2) create a player object
