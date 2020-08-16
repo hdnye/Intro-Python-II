@@ -1,7 +1,12 @@
 from room import Room
 from player import Player
-from item import Item
+from item import Item, Light, Trimmer
 
+
+"""
+# First goal is to make items
+# 
+"""
 # Declare all the rooms
 
 # Dictionary of rooms mapping name to Room 
@@ -25,7 +30,11 @@ earlier adventurers. The only exit is to the south."""),
 }
 
 
+
 # Link rooms together
+
+
+
 
 room["outside"].n_to = room["foyer"]
 room["foyer"].s_to = room["outside"]
@@ -34,10 +43,45 @@ room["foyer"].e_to = room["narrow"]
 room["overlook"].s_to = room["foyer"]
 room["narrow"].w_to = room["foyer"]
 room["narrow"].n_to = room["treasure"]
-room["treasure"].s_to = room["narrow"]
+room["overlook"].s_to = room["narrow"]
 
 
-room['outside'].item.append(Item('Knife:', 'Used to cutting or stabbing'))
+# create a dictionary of items
+dictionary = {
+    'item' : 'item object'
+}
+
+stuff = {
+    'Candle' : Item('Candle', 'Lights the way'),
+    'Flash' : Light('Flash', 'Shines brightly', True),
+    'Clippers' : Item('Clippers', 'Gardening tool'),
+    'Knife' : Trimmer('Knife', 'Stabby thing', True),
+    'Sword' : Trimmer('Sword', 'Stabby thing', True)
+    
+}
+
+
+
+items = {
+    'candle' : Item('Candle', 'Lights the way'),
+    'sword': Item('sword', 'It looks rusty. Don\'t get tetanus!'),
+    'coin': Item('coin', 'Is that gold!! Oh no wait... it is silver.'),
+    'knife': Item('knife', 'Ouch sharp!'),
+    'bat': Item('bat', 'Don\'t know why you would take a live animal but ok.'),
+    'glock': Item('glock', "A shiny glock lays on your path"),
+    'Flash' : Light('Flash', 'Shines brightly', True),
+    'Clippers' : Item('Clippers', 'Gardening tool'),
+    'Knife' : Trimmer('Knife', 'Stabby thing', True),
+    'Sword' : Trimmer('Sword', 'Stabby thing', True)
+}
+
+# Link items to rooms
+room['foyer'].items = [items['sword'], items['coin'], items['candle'], items['Flash']]
+room['overlook'].items = [items['knife']]
+room['narrow'].items = [items['bat']]
+room['outside'].items = [items['glock'], items['glock']]
+
+
 #
 # Main
 #
@@ -53,24 +97,52 @@ player1 = Player(room["outside"])
 # * Waits for user input and decides what to do.
 while True: 
     current_room = player1.current_room
+    
     print("player1", player1.current_room.name) 
     print("player1", player1.current_room.description)
-# Print items in the room 
-    print('The room contains the following items:')
-    for item in current_room.item:
-        print(item)
+    
+    # Print items in the room 
+    
+    print('The room contains the following items:', player1.current_room.items)
     user_input = input("Choose a direction to move in ('n', 's', 'e', 'w'): or get an item\n")    
     attribute = f"{user_input}_to"   
-# If the user enters a cardinal direction, attempt to move to the room there.
+    
+    # If the user enters a cardinal direction, attempt to move to the room there.
+    
     if hasattr(current_room, attribute):
         player1.current_room = getattr(current_room, attribute)               
-    # # Print an error message if the movement isn"t allowed.
+    
+    
+    elif 'take' in user_input or 'drop' in user_input:
+        action = user_input.split()
+        verb = action[0]
+        noun = action[1]
+
+        if verb == 'take':
+            
+            # if the verb is take
+            # place the item in the players backpack
+            # removve the item from the room
+            player1.take(items[noun])
+            player1.current_room.removed(items[noun])
+            
+
+    
+        # if the verb is drop
+        # remove the item in the players backpack
+        # place the item in the room 
+        
+    # # If the user enters "q", quit the game.
+    elif user_input == "q":
+        break   
+
+    elif user_input == "i":
+        player1.inventory()
+        
+    # # Print an error message if the movement isn"t allowed
     else:
         print("That is not a valid direction, please choose again")
         continue
-# # If the user enters "q", quit the game.
-    if user_input == "q":
-            break   
 
 # original code block - works but not dry
     # if user_input == "n":

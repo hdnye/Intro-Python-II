@@ -5,8 +5,14 @@
 class Player:
     def __init__(self, current_room):
         self.current_room = current_room
-        self.items = []
-
-
-
-    
+        self.backpack = []
+        
+    def take(self, item):
+        self.backpack.append(item)
+        
+    def drop(self, item):
+        self.backpack.remove(item)
+        
+    def inventory(self):
+        print("Inventory:",self.backpack)
+        print("\n")
