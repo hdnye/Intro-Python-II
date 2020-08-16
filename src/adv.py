@@ -57,7 +57,7 @@ while True:
     print("player1", player1.current_room.description)
 # Print items in the room 
     print('The room contains the following items:')
-    for item in current_room.items:
+    for item in current_room.item:
         print(item)
     user_input = input("Choose a direction to move in ('n', 's', 'e', 'w'): or get an item\n")    
     attribute = f"{user_input}_to"   
@@ -72,7 +72,7 @@ while True:
     if user_input == "q":
             break   
 
-# original code block
+# original code block - works but not dry
     # if user_input == "n":
     #     if hassattr(current_room, "n_to"):
     #         player1.current_room = getattr(current_room, attribute)
