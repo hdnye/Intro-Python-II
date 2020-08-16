@@ -1,6 +1,6 @@
 from room import Room
 from player import Player
-from item import Item
+from item import Item, Light, Trimmer
 
 # Declare all the rooms
 
@@ -24,6 +24,13 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
+# Create dictionary of items
+items = {
+    'Candle': Light('Candle','Lights the way', True),
+    'Flash': Light('Flash', 'Shines brightly', True),
+    'Clippers': Trimmer('Clippers', 'Gardening tool', True),
+    'Knife': Trimmer('Knife', 'Stabby thing', True)
+}
 
 # Link rooms together
 
@@ -37,14 +44,14 @@ room["narrow"].n_to = room["treasure"]
 room["treasure"].s_to = room["narrow"]
 
 
-room['outside'].item.append(Item('Knife:', 'Used to cutting or stabbing'))
+room['outside'].items = [items['Candle']]
 #
 # Main
 #
 
 # Make a new player object that is currently in the "outside" room.n
 
-player1 = Player(room["outside"])
+Heather = Player(room["outside"])
 
 # Write a loop that:
 #
@@ -52,39 +59,69 @@ player1 = Player(room["outside"])
 # * Prints the current description (the textwrap module might be useful here).
 # * Waits for user input and decides what to do.
 while True: 
-    current_room = player1.current_room
-    print("player1", player1.current_room.name) 
-    print("player1", player1.current_room.description)
+    current_room = Heather.current_room
+    print("Heather", Heather.current_room.name) 
+    print("Heather", Heather.current_room.description)
+
 # Print items in the room 
-    print('The room contains the following items:')
-    for item in current_room.item:
-        print(item)
-    user_input = input("Choose a direction to move in ('n', 's', 'e', 'w'): or get an item\n")    
+    print('The room contains the following items:', current_room.items)   
+    user_input = input("Choose a direction to move in ('n', 's', 'e', 'w') or get an item\n")    
     attribute = f"{user_input}_to"   
+
+# # If the user enters "q", quit the game.
+    if user_input == "q":
+        break
+
+    elif user_input == 'i':
+        Heather.inventory()
+
 # If the user enters a cardinal direction, attempt to move to the room there.
     if hasattr(current_room, attribute):
-        player1.current_room = getattr(current_room, attribute)               
+        Heather.current_room = getattr(current_room, attribute)     
+   
+    elif 'take' in user_input or 'drop' in user_input: 
+        action = user_input.split()
+        verb = action[0]
+        noun = action[1]
+
+        if verb == 'take':                
+            # if the verb is take
+            # removethe item in the players backpack
+            # add item from the room
+            Heather.current_room.remove(items[noun])
+            Heather.take(items[noun])
+
+        print(items[noun])
+
+
+        if verb == 'drop':
+            # if the verb is drop
+            # place the item in the players backpack
+            # remove item from the room
+            Heather.current_room.append(items[noun])
+            Heather.drop(items[noun])
+
+        print(items[noun])
+
     # # Print an error message if the movement isn"t allowed.
     else:
         print("That is not a valid direction, please choose again")
         continue
-# # If the user enters "q", quit the game.
-    if user_input == "q":
-            break   
 
+ 
 # original code block - works but not dry
     # if user_input == "n":
     #     if hassattr(current_room, "n_to"):
-    #         player1.current_room = getattr(current_room, attribute)
+    #         Heather.current_room = getattr(current_room, attribute)
     # if user_input == "s":
     #     if hasattr(current_room, "s_to"):
-    #         player1.current_room = getattr(current_room, attribute)
+    #         Heather.current_room = getattr(current_room, attribute)
     # if user_input == "e":
     #     if hasattr(current_room, "e_to"):
-    #         player1.current_room = getattr(current_room, attribute)
+    #         Heather.current_room = getattr(current_room, attribute)
     # if user_input == "w":
     #     if hasattr(current_room, "w_to"):
-    #         player1.current_room = getattr(current_room, attribute)
+    #         Heather.current_room = getattr(current_room, attribute)
  
  # PLAN
 # 1) Create room class with name and description

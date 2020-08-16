@@ -14,8 +14,11 @@ class Room:
         self.s_to: Room = None
         self.e_to: Room = None
         self.w_to: Room = None
-        self.item: [Item] = []
+        self.items: [] 
 
+    def remove(self, item):
+        self.items.remove(item)
     
-
+    def append(self, item):
+        self.items.append(item)
 
